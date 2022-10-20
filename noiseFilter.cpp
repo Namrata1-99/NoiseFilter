@@ -1,5 +1,6 @@
 #include <iostream>
 #include <assert.h>
+#include <stdio.h>
 using namespace std;
 
 int *filter(int input[], int len, int filterSize)
@@ -8,22 +9,31 @@ int *filter(int input[], int len, int filterSize)
     int sum;
     for (int i = 0; i < len - 2; i++)
     {
-        sum = input[i] + input[i + 1] + input[i + 2];
+        int j = filterSize;
+        sum = 0;
+        while (j > 0)
+        {
+            sum = sum + input[i + (j - 1)];
+            j--;
+        }
         output[i] = sum / filterSize;
     }
     return output;
 }
 
-int main()
+void test(int *filteredNoiseArray,int len)
 {
-    int n, filterSize;
-    cout << "Enter size of the array: ";
-    cin >> n;
-    cout << "Enter filter size: ";
-    cin >> filterSize;
-    int input[n];
+    assert(sizeof(filteredNoiseArray) == len - 2);
+}
 
-    for (int i = 0; i < n; i++)
+int main(int argc, char *argv[])
+{
+    int arrLen = atoi(argv[1]);
+    int filterSize = atoi(argv[2]);
+
+    int input[arrLen];
+
+    for (int i = 0; i < arrLen; i++)
     {
         input[i] = rand();
     }
@@ -37,7 +47,7 @@ int main()
         cout << filteredNoiseArray[i] << " ";
     }
 
-    assert(sizeof(filteredNoiseArray) == len-2);
+    test(filteredNoiseArray, len);
 
     return 0;
 }
