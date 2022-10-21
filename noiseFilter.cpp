@@ -1,13 +1,14 @@
 #include <iostream>
 #include <assert.h>
 #include <stdio.h>
+#include <list>
 using namespace std;
 
-int *filter(int input[], int len, int filterSize)
+list<int> filter(int input[], int len, int filterSize)
 {
-    int *output = new int[len];
+    list<int> output;
     int sum;
-    for (int i = 0; i < len - 2; i++)
+    for (int i = 0; i < len - (filterSize - 1); i++)
     {
         int j = filterSize;
         sum = 0;
@@ -16,14 +17,20 @@ int *filter(int input[], int len, int filterSize)
             sum = sum + input[i + (j - 1)];
             j--;
         }
-        output[i] = sum / filterSize;
+        output.push_back(sum / filterSize);
     }
     return output;
 }
 
-void test(int *filteredNoiseArray,int len)
+void testIfExpectedFilteredArrayLengthIsEqualToFilteredNoiseArrayLength()
 {
-    assert(sizeof(filteredNoiseArray) == len - 2);
+    int inputArray[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    int inputLen = sizeof(inputArray) / sizeof(inputArray[0]);
+    int filterSize = 3;
+
+    list<int> output = filter(inputArray, inputLen, filterSize);
+
+    assert(output.size() == (inputLen - (filterSize - 1)));
 }
 
 int main(int argc, char *argv[])
@@ -40,14 +47,15 @@ int main(int argc, char *argv[])
 
     int len = sizeof(input) / sizeof(input[0]);
 
-    int *filteredNoiseArray = filter(input, len, filterSize);
+    list<int> filteredNoiseArray = filter(input, len, filterSize);
 
-    for (int i = 0; i < sizeof(filteredNoiseArray); i++)
+    list<int>::iterator it;
+    for (it = filteredNoiseArray.begin(); it != filteredNoiseArray.end(); ++it)
     {
-        cout << filteredNoiseArray[i] << " ";
+        cout << " " << *it;
     }
 
-    test(filteredNoiseArray, len);
+    testIfExpectedFilteredArrayLengthIsEqualToFilteredNoiseArrayLength();
 
     return 0;
 }
